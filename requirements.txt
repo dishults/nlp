@@ -1,0 +1,6 @@
+tqdm
+openpyxl
+pandas
+google-cloud-language
+xlrd
+xlwt
