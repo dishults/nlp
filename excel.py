@@ -3,10 +3,10 @@ Handles Excel document
 '''
 import pandas as pd
 
-def get_xl(xl_file):
+def get_xl(file, new_file):
     "Make Excel file ready for analyze"
     # Read Excel file
-    data = pd.read_excel(xl_file, header=None)
+    data = pd.read_excel(file, header=None)
 
     # If no proper Header -> create one
     if (data.iloc[0, 0] != "Feedback" or data.iloc[0, 1] != "Score"
@@ -21,16 +21,7 @@ def get_xl(xl_file):
         # Drop rows(index) with any empty cells
         data.dropna(axis='index', inplace=True)
         # Update Excel file
-        data.to_excel("s_" + xl_file, index=None, header=True)
-        data = pd.read_excel("s_" + xl_file, header=None)
+        data.to_excel(new_file, index=None, header=True)
+        data = pd.read_excel(new_file)
 
     return data, len(data.index)
-
-def store_results(xl_file, line, score, magnitude):
-    "Stores sentiment analyzes results"
-    xl = pd.read_excel(xl_file)
-    line -= 1
-    # Store results rounded to 1 decemal place
-    xl.iloc[line, 1] = round(score, 1) * 10
-    xl.iloc[line, 2] = round(magnitude, 1)
-    xl.to_excel(xl_file, index=None, header=True)

@@ -31,34 +31,34 @@ Example usage:
     python3 analyze.py test.xls
 '''
 
-import sys
-
 # To show progress bar
 from tqdm import tqdm
 
-# My files
-import check as ck
+# Project files
+import check
 import excel as xl
-import google_nl as g
+#import google_nl as g
 import print_results
 
 if __name__ == '__main__':
-    TYPE = ck.check(sys.argv)
-    FILE = sys.argv[1]
+    # If check won't go through, program will show error msg and exit
+    FILE, NEW_FILE, TYPE = check.arguments()
 
-#    class Sent:
-#        score = 0.568784152
-#        magnitude = 0.498455648
-#    SEN = Sent()
-    
+    class Sent:
+        score = 0.568784152
+        magnitude = 0.498455648
+    SEN = Sent()
+
     if TYPE == '.txt':
         TXT = open(FILE, "r")
-        SEN = g.analyze_sentiment(TXT.read())
+        #SEN = g.analyze_sentiment(TXT.read())
         TXT.close()
         print_results.text(SEN)
     elif TYPE == 'excel':
-        DATA, ROWS_NB = xl.get_xl(FILE)
-        for LINE in tqdm(range(1, ROWS_NB)):
-            SEN = g.analyze_sentiment(DATA.iloc[LINE, 0])
-            xl.store_results("s_" + FILE, LINE, SEN.score, SEN.magnitude)
-        print_results.excel(FILE)
+        DATA, ROWS_NB = xl.get_xl(FILE, NEW_FILE)
+        for ROW in tqdm(range(ROWS_NB)):
+            #SEN = g.analyze_sentiment(DATA.iloc[ROW, 0])
+            DATA.iloc[ROW, 1] = round(SEN.score, 1) * 10
+            DATA.iloc[ROW, 2] = round(SEN.magnitude, 1)
+        DATA.to_excel(NEW_FILE, index=None)
+        print_results.excel(NEW_FILE)

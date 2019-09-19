@@ -13,6 +13,6 @@ Magnitude:\t{round(sen.magnitude, 1)}\n
 def excel(file):
     "Prints final msg for .xls/.xlsx file"
  
-    print(f'''\nDONE! RESULTS IN:\t{"s_" + file}\n
+    print(f'''\nDONE! RESULTS IN:\t{file}\n
  - score range is from -10 to 10
  - magnitude range is from 0 to infinity''')
